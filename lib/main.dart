@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       home: const LoginOrRegister(),
       theme: Provider.of<ThemeProvider>(context).themeData,
+      
     );
   }
 }
