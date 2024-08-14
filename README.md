@@ -111,8 +111,4 @@ I have developed a comprehensive delivery application that streamlines the proce
 </table>
 
 
-
----
-
-You can replace the image links with actual paths to your screenshots.# food_delivery_app
  
