@@ -1,28 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery_app/models/restaurant.dart';
+import 'package:provider/provider.dart';
 
-class MyCurrentLocation extends StatelessWidget {
+class MyCurrentLocation extends StatefulWidget {
+
   const MyCurrentLocation({super.key});
+
+  @override
+  State<MyCurrentLocation> createState() => _MyCurrentLocationState();
+}
+
+class _MyCurrentLocationState extends State<MyCurrentLocation> {
+  final TextEditingController textController = TextEditingController();
 
   void openLocationSearchBox(BuildContext context) {
     showDialog(
-      context: context, 
+      context: context,
       builder: (context) => AlertDialog(
         title: const Text("Your location"),
-        content: const TextField(
-          decoration: InputDecoration(
-            hintText: "Search address.."
-          ),
+        content: TextField(
+          controller: textController,
+          decoration: const InputDecoration(hintText: "Enter address.."),
         ),
         actions: [
           // cancel button
           MaterialButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () { 
+              Navigator.pop(context);
+              textController.clear();
+              },
             child: const Text("Cancel"),
           ),
 
           // save button
           MaterialButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              // update delivery address
+              String newAddress = textController.text;
+              context.read<Restaurant>().updateDeliveryAddress(newAddress);
+              Navigator.pop(context);
+              textController.clear();
+            },
             child: const Text("Save"),
           ),
         ],
@@ -48,17 +66,22 @@ class MyCurrentLocation extends StatelessWidget {
             onTap: () => openLocationSearchBox(context),
             child: Row(
               children: [
-                // adress
-                Text(
-                  "6901 Hollywood Blv",
-                  style: TextStyle(
-                    color: theme.inversePrimary,
-                    fontWeight: FontWeight.bold,
+                Consumer<Restaurant>(
+                  builder: (context, restaurant, child) =>
+                      // adress
+                      Text(
+                    restaurant.deliveryAddress,
+                    style: TextStyle(
+                      color: theme.inversePrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-
                 // drop down menu
-                const Icon(Icons.keyboard_arrow_down_rounded),
+                Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               ],
             ),
           )

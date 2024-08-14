@@ -6,11 +6,11 @@ import 'package:provider/provider.dart';
 
 class MyCartTile extends StatelessWidget {
   final CartItem cartItem;
-  
+
   const MyCartTile({
     super.key,
     required this.cartItem,
-    });
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +19,7 @@ class MyCartTile extends StatelessWidget {
     return Consumer<Restaurant>(
       builder: (context, restaurant, child) => Container(
         decoration: BoxDecoration(
-          color: theme.secondary,
-          borderRadius: BorderRadius.circular(8)
-        ),
+            color: theme.secondary, borderRadius: BorderRadius.circular(8)),
         margin: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
         child: Column(
           children: [
@@ -33,13 +31,16 @@ class MyCartTile extends StatelessWidget {
                   // food image
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(cartItem.food.imagePath,
-                    height: 100,
-                    width: 100,
+                    child: Image.asset(
+                      cartItem.food.imagePath,
+                      height: 100,
+                      width: 100,
                     ),
                   ),
-              
-                  const SizedBox(width: 10,),
+
+                  const SizedBox(
+                    width: 10,
+                  ),
                   // food name and price
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,30 +48,31 @@ class MyCartTile extends StatelessWidget {
                       // food name
                       Text(cartItem.food.name),
                       // food price
-                      Text('\$${cartItem.food.price}',
-                        style: TextStyle(
-                          color: theme.primary
-                        ),
+                      Text(
+                        '\$${cartItem.food.price}',
+                        style: TextStyle(color: theme.primary),
+                      ),
+
+                      const SizedBox(
+                        height: 10,
+                      ),
+
+                      // increment or decrement quantity
+                      MyQuantitySelector(
+                        quantity: cartItem.quantity,
+                        food: cartItem.food,
+                        onIncrement: () {
+                          restaurant.addToCart(
+                              cartItem.food, cartItem.selectedAddons);
+                        },
+                        onDecrement: () {
+                          restaurant.removeFromCart(cartItem);
+                        },
                       ),
                     ],
                   ),
 
                   const Spacer(),
-              
-                  // increment or decrement quantity
-                  MyQuantitySelector(
-                    quantity: cartItem.quantity, 
-                    food: cartItem.food, 
-                    onIncrement: () {
-                      restaurant.addToCart(
-                        cartItem.food, 
-                        cartItem.selectedAddons
-                      );
-                    }, 
-                    onDecrement: (){
-                      restaurant.removeFromCart(cartItem);
-                    },
-                  ),
                 ],
               ),
             ),
@@ -81,32 +83,29 @@ class MyCartTile extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 scrollDirection: Axis.horizontal,
                 children: cartItem.selectedAddons
-                .map((addon) => Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: FilterChip(
-                      label: Row(
-                        children: [
-                          // addon name
-                          Text(addon.name),
-                  
-                          // addon price
-                          Text(" (\$${addon.price})"),
-                        ],
-                      ), 
-                      shape: StadiumBorder(
-                        side: BorderSide(
-                          color: theme.primary
-                        )
-                      ),
-                      onSelected: (value){},
-                      backgroundColor: theme.secondary,
-                      labelStyle: TextStyle(
-                        color: theme.inversePrimary,
-                        fontSize: 12,
-                      ),
-                    ),
-                ))
-                  .toList(),
+                    .map((addon) => Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: FilterChip(
+                            label: Row(
+                              children: [
+                                // addon name
+                                Text(addon.name),
+
+                                // addon price
+                                Text(" (\$${addon.price})"),
+                              ],
+                            ),
+                            shape: StadiumBorder(
+                                side: BorderSide(color: theme.primary)),
+                            onSelected: (value) {},
+                            backgroundColor: theme.secondary,
+                            labelStyle: TextStyle(
+                              color: theme.inversePrimary,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ))
+                    .toList(),
               ),
             )
 
